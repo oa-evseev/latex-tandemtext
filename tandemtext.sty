@@ -1,0 +1,255 @@
+% tandemtext.sty
+\ProvidesPackage{tandemtext}[2025/10/20 v0.1 Parallel bilingual typesetting core]
+
+% Minimal, reusable dependencies only
+\RequirePackage{xparse}
+\RequirePackage{paracol}
+\RequirePackage{babel}
+\RequirePackage{needspace}
+\RequirePackage{tabularx}
+\RequirePackage{array}
+\RequirePackage{makecell}
+\RequirePackage{calc}
+
+% -------------------------------
+% Language options (A | B)
+% -------------------------------
+\newcommand\ttLangA{english}
+\newcommand\ttLangB{english}
+\newif\iftt@Aset \tt@Asetfalse
+\DeclareOption*{%
+  \iftt@Aset
+    \edef\ttLangB{\CurrentOption}%
+  \else
+    \edef\ttLangA{\CurrentOption}%
+    \tt@Asettrue
+  \fi
+}
+\ProcessOptions\relax
+
+\edef\tt@babel@opts{\ttLangA,\ttLangB}%
+\PassOptionsToPackage{\tt@babel@opts}{babel}
+
+\newcommand{\SelectLangA}{%
+  \expandafter\selectlanguage\expandafter{\ttLangA}%
+}
+\newcommand{\SelectLangB}{%
+  \expandafter\selectlanguage\expandafter{\ttLangB}%
+}
+
+% -------------------------------
+% Bilingual title
+% -------------------------------
+\newcommand{\BilingualTitle}[2]{%
+  \begin{center}
+    \Large\textbf{\MakeUppercase{#1} \\[0.5em] \MakeUppercase{#2}}
+  \end{center}\vspace{1em}%
+}
+
+% -------------------------------
+% Bilingual sectioning
+% -------------------------------
+\NewDocumentCommand{\BilingualSection}{m m}{%
+  \needspace{10\baselineskip}%
+  \vspace*{-0.3em}%
+  \refstepcounter{section}%
+  \phantomsection%
+  \addcontentsline{toc}{section}{\thesection\ #1 | #2}%
+  \section*{%
+    \begin{tabularx}{\textwidth}{XcX}
+      \raggedright \textbf{#1} & \textbf{-- \thesection\ --} & \raggedleft \textbf{#2}
+    \end{tabularx}%
+  }%
+  \vspace*{-1.7em}%
+}
+
+\NewDocumentCommand{\BilingualSubsection}{m m}{%
+  \needspace{8\baselineskip}%
+  \vspace*{-0.3em}%
+  \refstepcounter{subsection}%
+  \phantomsection%
+  \addcontentsline{toc}{subsection}{\thesubsection\ #1 | #2}%
+  \subsection*{%
+    \begin{tabularx}{\textwidth}{XcX}
+      \raggedright \textbf{#1} & \textbf{-- \thesubsection\ --} & \raggedleft \textbf{#2}
+    \end{tabularx}%
+  }%
+  \vspace*{-1.7em}%
+}
+
+\NewDocumentCommand{\BilingualSubsubsection}{m m}{%
+  \needspace{5\baselineskip}%
+  \vspace*{-0.3em}%
+  \refstepcounter{subsubsection}%
+  \phantomsection%
+  \addcontentsline{toc}{subsubsection}{\thesubsubsection\ #1 | #2}%
+  \subsubsection*{%
+    \begin{tabularx}{\textwidth}{XcX}
+      \raggedright \textbf{#1} & \textbf{-- \thesubsubsection\ --} & \raggedleft \textbf{#2}
+    \end{tabularx}%
+  }%
+  \vspace*{-1.7em}%
+}
+
+% -------------------------------
+% Bilingual paragraph (two columns)
+% -------------------------------
+\newcommand{\BilingualParagraph}[2]{%
+  \begin{paracol}{2}%
+    \SelectLangA #1%
+    \switchcolumn%
+    \SelectLangB #2%
+  \end{paracol}%
+  \vspace{1em}%
+}
+
+% ===============================
+% Condensed bilingual headings
+% ===============================
+\newlength\tt@cond@section@pre    \setlength\tt@cond@section@pre{7mm}
+\newlength\tt@cond@section@post   \setlength\tt@cond@section@post{3mm}
+\newlength\tt@cond@subsec@pre     \setlength\tt@cond@subsec@pre{6mm}
+\newlength\tt@cond@subsec@post    \setlength\tt@cond@subsec@post{2mm}
+\newlength\tt@cond@subsub@pre     \setlength\tt@cond@subsub@pre{4mm}
+\newlength\tt@cond@subsub@post    \setlength\tt@cond@subsub@post{1mm}
+
+\newcommand{\SetCondensedSpacing}[6]{%
+  \setlength\tt@cond@section@pre{#1}%
+  \setlength\tt@cond@section@post{#2}%
+  \setlength\tt@cond@subsec@pre{#3}%
+  \setlength\tt@cond@subsec@post{#4}%
+  \setlength\tt@cond@subsub@pre{#5}%
+  \setlength\tt@cond@subsub@post{#6}%
+}
+\newcommand{\SetCondensedSpacingDefault}{%
+  \setlength\tt@cond@section@pre{7mm}%
+  \setlength\tt@cond@section@post{3mm}%
+  \setlength\tt@cond@subsec@pre{6mm}%
+  \setlength\tt@cond@subsec@post{2mm}%
+  \setlength\tt@cond@subsub@pre{4mm}%
+  \setlength\tt@cond@subsub@post{1mm}%
+}
+
+\NewDocumentCommand{\BilingualSectionCondensed}{m m}{%
+  \vspace{-\tt@cond@section@pre}%
+  \BilingualSection{#1}{#2}%
+  \vspace{-\tt@cond@section@post}%
+}
+\NewDocumentCommand{\BilingualSubsectionCondensed}{m m}{%
+  \vspace{-\tt@cond@subsec@pre}%
+  \BilingualSubsection{#1}{#2}%
+  \vspace{-\tt@cond@subsec@post}%
+}
+\NewDocumentCommand{\BilingualSubsubsectionCondensed}{m m}{%
+  \vspace{-\tt@cond@subsub@pre}%
+  \BilingualSubsubsection{#1}{#2}%
+  \vspace{-\tt@cond@subsub@post}%
+}
+
+% ============================================
+% Bilingual lists — unified core
+% ============================================
+\newlength\bilLabelWidth
+\newlength\bilItemVSpace
+\setlength\bilItemVSpace{3pt}
+
+\newif\ifbil@enumerate
+\bil@enumeratefalse
+
+% Bullet (itemize)
+\newcommand{\biLabel}{\textbullet}
+\newcommand{\SetBilingualItemLabel}[1]{\renewcommand{\biLabel}{#1}}
+
+% Enumerate label format
+\newcounter{blitemi}
+\newcommand{\blLabelformat}{\alph{blitemi})}
+\newcommand{\SetBilingualEnumLabel}[1]{\renewcommand{\blLabelformat}{##1}}
+
+\newcommand{\SetBilingualListSpacing}[2]{%
+  \parskip=#1\relax
+  \setlength\bilItemVSpace{#2}%
+}
+\newcommand{\SetBilingualListSpacingDefault}{%
+  \parskip=3pt
+  \setlength\bilItemVSpace{3pt}%
+}
+
+% Env: enumerateBilingual
+\NewDocumentEnvironment{enumerateBilingual}{}%
+{%
+  \bil@enumeratetrue
+  \setcounter{blitemi}{0}%
+  \begin{paracol}{2}%
+  \SetBilingualListSpacingDefault
+}%
+{%
+  \end{paracol}%
+  \bil@enumeratefalse
+}
+
+% Env: itemizeBilingual
+\NewDocumentEnvironment{itemizeBilingual}{}%
+{%
+  \bil@enumeratefalse
+  \begin{paracol}{2}%
+  \SetBilingualListSpacingDefault
+}%
+{%
+  \end{paracol}%
+}
+
+% Unified item
+\NewDocumentCommand{\itemBilingual}{m m}{%
+  \ifbil@enumerate
+    \stepcounter{blitemi}%
+    \begingroup
+      \xdef\bil@label{\blLabelformat}%
+    \endgroup
+    \settowidth{\bilLabelWidth}{\textbf{\bil@label}\enspace}%
+    \def\bil@printlabel{\textbf{\bil@label}\enspace}%
+  \else
+    \def\bil@label{\biLabel}%
+    \settowidth{\bilLabelWidth}{\textbf{\bil@label}\enspace}%
+    \def\bil@printlabel{\textbf{\bil@label}\enspace}%
+  \fi
+  % Left (A)
+  \noindent\makebox[\bilLabelWidth][l]{\bil@printlabel}%
+  \hangindent=\bilLabelWidth \hangafter=1
+  \SelectLangA #1\par
+  % Right (B)
+  \switchcolumn%
+  \noindent\makebox[\bilLabelWidth][l]{\bil@printlabel}%
+  \hangindent=\bilLabelWidth \hangafter=1
+  \SelectLangB #2\par
+  % Gap and sync
+  \vspace{\bilItemVSpace}%
+  \switchcolumn*%
+}
+
+% Back-compat alias
+\let\itemBilingualItem\itemBilingual
+
+% -------------------------------
+% Table helpers
+% -------------------------------
+\newcommand{\BilingualCell}[3]{%
+  \begingroup
+  \setlength{\dimen0}{\widthof{#2 #3}}%
+  \ifdim\dimen0<#1
+    \makebox[\dimexpr#1][c]{#2 | #3}%
+  \else
+    \makecell[l]{%
+      \parbox[c]{\linewidth}{\vspace{0.5em}#2} \\ %
+      \rule{#1}{0.5pt} \\%
+      \parbox[c]{\linewidth}{\vspace{0.2em}#3}%
+      \\%
+    }%
+  \fi
+  \endgroup
+}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.2}
+

@@ -1,0 +1,10 @@
+\input{regression-test.tex}
+\documentclass{article}
+\usepackage[english,spanish]{tandemtext}
+\begin{document}
+\START
+\BilingualSection{Purpose}{Propósito}
+\BilingualSubsection{Scope}{Alcance}
+\BilingualSubsubsection{Details}{Detalles}
+\END
+\end{document}

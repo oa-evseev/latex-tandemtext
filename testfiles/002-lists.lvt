@@ -1,0 +1,14 @@
+\input{regression-test.tex}
+\documentclass{article}
+\usepackage[english,spanish]{tandemtext}
+\begin{document}
+\START
+\begin{enumerateBilingual}
+  \itemBilingual{Left a}{Derecha a}
+  \itemBilingual{Left b}{Derecha b}
+\end{enumerateBilingual}
+\begin{itemizeBilingual}
+  \itemBilingual{Item L}{Item R}
+\end{itemizeBilingual}
+\END
+\end{document}

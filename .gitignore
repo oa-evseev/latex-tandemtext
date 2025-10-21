@@ -1,0 +1,6 @@
+build/
+*.log
+*.aux
+*.toc
+*.pdf
+*.zip
