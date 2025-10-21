@@ -54,6 +54,30 @@ It provides simple commands for dual-language sections, paragraphs, and lists, b
 2. Run `texhash` if needed.
 3. Use `\usepackage[<langA>,<langB>]{tandemtext}`.
 
+### 🧩 Local Installation
+
+To install the development version locally (for testing before CTAN release):
+
+```bash
+install -Dm644 ./tandemtext.sty "$(kpsewhich --var-value=TEXMFHOME)/tex/latex/tandemtext/tandemtext.sty"
+texhash "$(kpsewhich --var-value=TEXMFHOME)"
+```
+
+After this, you can use `\usepackage{tandemtext}` in any LaTeX document.
+
+> 💡 Works identically for `pdflatex`, `xelatex`, and `lualatex`, since all engines share the same kpathsea file search mechanism. TeX always prioritises files in the **current directory** over those in user/system TEXMF trees, so you can safely develop the package while keeping a local installed copy.
+
+---
+
+### 🧹 Uninstallation
+
+To remove the locally installed copy:
+
+```bash
+rm -f "$(kpsewhich --var-value=TEXMFHOME)/tex/latex/tandemtext/tandemtext.sty"
+texhash "$(kpsewhich --var-value=TEXMFHOME)"
+```
+
 ---
 
 ## License
