@@ -65,7 +65,7 @@ See [LICENSE](LICENSE) for details.
 
 ## Repository
 
-<https://github.com/yourname/latex-tandemtext>
+<https://github.com/oa-evseev/latex-tandemtext>
 
 ---
 
