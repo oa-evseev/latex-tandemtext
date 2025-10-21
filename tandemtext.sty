@@ -53,7 +53,6 @@
 % -------------------------------
 \NewDocumentCommand{\BilingualSection}{m m}{%
   \needspace{10\baselineskip}%
-  \vspace*{-0.3em}%
   \refstepcounter{section}%
   \phantomsection%
   \addcontentsline{toc}{section}{\thesection\ #1 | #2}%
@@ -62,12 +61,10 @@
       \raggedright \textbf{#1} & \textbf{-- \thesection\ --} & \raggedleft \textbf{#2}
     \end{tabularx}%
   }%
-  \vspace*{-1.7em}%
 }
 
 \NewDocumentCommand{\BilingualSubsection}{m m}{%
   \needspace{8\baselineskip}%
-  \vspace*{-0.3em}%
   \refstepcounter{subsection}%
   \phantomsection%
   \addcontentsline{toc}{subsection}{\thesubsection\ #1 | #2}%
@@ -76,12 +73,10 @@
       \raggedright \textbf{#1} & \textbf{-- \thesubsection\ --} & \raggedleft \textbf{#2}
     \end{tabularx}%
   }%
-  \vspace*{-1.7em}%
 }
 
 \NewDocumentCommand{\BilingualSubsubsection}{m m}{%
   \needspace{5\baselineskip}%
-  \vspace*{-0.3em}%
   \refstepcounter{subsubsection}%
   \phantomsection%
   \addcontentsline{toc}{subsubsection}{\thesubsubsection\ #1 | #2}%
@@ -90,7 +85,6 @@
       \raggedright \textbf{#1} & \textbf{-- \thesubsubsection\ --} & \raggedleft \textbf{#2}
     \end{tabularx}%
   }%
-  \vspace*{-1.7em}%
 }
 
 % -------------------------------
