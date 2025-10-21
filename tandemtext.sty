@@ -11,6 +11,8 @@
 \RequirePackage{makecell}
 \RequirePackage{calc}
 
+\providecommand{\phantomsection}{} % no-op when hyperref is not loaded
+
 % -------------------------------
 % Language options (A | B)
 % -------------------------------
@@ -163,7 +165,7 @@
 % Enumerate label format
 \newcounter{blitemi}
 \newcommand{\blLabelformat}{\alph{blitemi})}
-\newcommand{\SetBilingualEnumLabel}[1]{\renewcommand{\blLabelformat}{##1}}
+\newcommand{\SetBilingualEnumLabel}[1]{\renewcommand{\blLabelformat}{#1}}
 
 \newcommand{\SetBilingualListSpacing}[2]{%
   \parskip=#1\relax
