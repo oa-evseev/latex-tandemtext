@@ -1,0 +1,56 @@
+\documentclass{article}
+% Symlink tandemtext.sty into this directory for local dev:
+%   ln -s ../tandemtext.sty examples/tandemtext.sty
+\usepackage[english,spanish]{tandemtext}
+
+\title{tandemtext playground}
+\author{Development sandbox}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\BilingualTitle{Sample Agreement}{Acuerdo de Ejemplo}
+
+\BilingualSection{Purpose}{Propósito}
+\BilingualParagraph{%
+This Agreement defines the terms of cooperation. It demonstrates parallel bilingual paragraphs.%
+}{%
+Este Acuerdo define los términos de cooperación. Demuestra párrafos bilingües paralelos.%
+}
+
+\BilingualSubsection{Scope}{Alcance}
+\begin{enumerateBilingual}
+  \itemBilingual{The Contractor shall deliver materials.}{El Contratista entregará los materiales.}
+  \itemBilingual{The Customer shall provide access.}{El Cliente proporcionará el acceso.}
+  \itemBilingual{Both parties agree on timelines.}{Ambas partes acuerdan los plazos.}
+\end{enumerateBilingual}
+
+\BilingualSubsectionCondensed{Compact Lists}{Listas compactas}
+\begin{itemizeBilingual}
+  \itemBilingual{Bullet on the left}{Viñeta a la derecha}
+  \itemBilingual{Second bullet}{Segunda viñeta}
+\end{itemizeBilingual}
+
+\BilingualSubsection{Custom Spacing}{Espaciado personalizado}
+\begin{enumerateBilingual}
+  \SetBilingualListSpacing{0pt}{1pt}% parskip, vspace between bilingual items
+  \itemBilingual{Tight item A}{Elemento compacto A}
+  \itemBilingual{Tight item B}{Elemento compacto B}
+\end{enumerateBilingual}
+
+\BilingualSubsection{Tables}{Tablas}
+\noindent\begin{tabularx}{\linewidth}{|L{.45\linewidth}|C{.1\linewidth}|R{.45\linewidth}|}
+\hline
+\BilingualCell{.95\linewidth}{Left label}{Etiqueta derecha} \\ \hline
+\end{tabularx}
+
+\BilingualSubsection{Condensed Headings}{Encabezados condensados}
+\BilingualSubsubsectionCondensed{Details}{Detalles}
+\BilingualParagraph{%
+Condensed variants reduce vertical whitespace before and after headings.%
+}{%
+Las variantes condensadas reducen el espacio vertical antes y después de los encabezados.%
+}
+
+\end{document}

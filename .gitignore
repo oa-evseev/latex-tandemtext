@@ -1,6 +1,12 @@
 build/
-*.log
-*.aux
-*.toc
 *.pdf
 *.zip
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
