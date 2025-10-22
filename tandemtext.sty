@@ -4,21 +4,43 @@
 % Minimal, reusable dependencies only
 \RequirePackage{xparse}
 \RequirePackage{paracol}
-\RequirePackage{babel}
 \RequirePackage{needspace}
 \RequirePackage{tabularx}
 \RequirePackage{array}
 \RequirePackage{makecell}
 \RequirePackage{calc}
+\RequirePackage{xstring}
+\RequirePackage{fmtcount}
+\RequirePackage{xcolor}
 
 \providecommand{\phantomsection}{} % no-op when hyperref is not loaded
 
+\makeatletter
+
+% ----------------------------------------------------------------
+% Enforce that babel is not loaded before tandemtext
+% ----------------------------------------------------------------
+\@ifpackageloaded{babel}{%
+  \PackageError{tandemtext}{The 'babel' package was already loaded before tandemtext}%
+  {%
+    Please remove \string\usepackage{babel} from your document or load tandemtext first,\MessageBreak
+    because tandemtext must pass its own language options to babel.\MessageBreak
+    Otherwise multilingual features will not work correctly.%
+  }%
+}{}
+
 % -------------------------------
-% Language options (A | B)
+% Language options (A | B) + layout option
 % -------------------------------
 \newcommand\ttLangA{english}
 \newcommand\ttLangB{english}
 \newif\iftt@Aset \tt@Asetfalse
+\newif\iftt@compactlayout \tt@compactlayoutfalse
+
+% Named options must be declared before the wildcard
+\DeclareOption{compactlayout}{\tt@compactlayouttrue}
+
+% Any other option is treated as a language: first -> A, second -> B
 \DeclareOption*{%
   \iftt@Aset
     \edef\ttLangB{\CurrentOption}%
@@ -31,13 +53,71 @@
 
 \edef\tt@babel@opts{\ttLangA,\ttLangB}%
 \PassOptionsToPackage{\tt@babel@opts}{babel}
+\RequirePackage{babel}
 
+% as told in the `datetime2` manual: "make sure you load babel/polyglossia before you load datetime2"
+\RequirePackage[useregional,calc]{datetime2}
+
+% ----------------------------------------------------------------
+% Optional compact layout (opt-in) and gentle width check
+% ----------------------------------------------------------------
+\iftt@compactlayout
+  % Modest margins suitable for two-column bilingual text
+  \RequirePackage[margin=18mm,includeheadfoot]{geometry}
+  \AtBeginDocument{%
+    \setlength{\columnsep}{16pt}% typical range: 14--18 pt
+  }%
+\fi
+
+% Warn if the text block is likely too narrow for two readable columns
+\newdimen\tt@mintextwidth
+\tt@mintextwidth=380pt % ~133 mm
+\AtBeginDocument{%
+  \ifdim\textwidth<\tt@mintextwidth
+    \PackageWarningNoLine{tandemtext}{%
+      The current \string\textwidth\space (\the\textwidth) may be too narrow for two-column bilingual text.
+      Consider adjusting geometry or using the 'compactlayout' option.%
+    }%
+  \fi
+}
+
+% ----------------------------------------------------------------
+% Check if a babel language is loaded (by testing \captions<lang>)
+% ----------------------------------------------------------------
+\newcommand\tt@babelLoadedTF[3]{%
+  % #1 = language name (e.g., english, spanish)
+  % #2 = true branch
+  % #3 = false branch
+  \ifcsname captions#1\endcsname
+    #2%
+  \else
+    #3%
+  \fi
+}
+
+\newcommand\tt@ensureBabel[1]{%
+  % Raise an error if language is not loaded
+  \tt@babelLoadedTF{#1}{}{%
+    \PackageError{tandemtext}{Babel language '#1' is not loaded}%
+    {Add '#1' to the package options or to \string\usepackage[...]{babel}.}%
+  }%
+}
+
+% making sure both languages are indeed loaded
+\tt@ensureBabel{\ttLangA}
+\tt@ensureBabel{\ttLangB}
+
+% ----------------------------------------------------------------
+% Language selectors that also adjust datetime2 style
+% ----------------------------------------------------------------
 \newcommand{\SelectLangA}{%
   \expandafter\selectlanguage\expandafter{\ttLangA}%
 }
+
 \newcommand{\SelectLangB}{%
   \expandafter\selectlanguage\expandafter{\ttLangB}%
 }
+
 
 % -------------------------------
 % Bilingual title
@@ -102,6 +182,7 @@
 % ===============================
 % Condensed bilingual headings
 % ===============================
+
 \newlength\tt@cond@section@pre    \setlength\tt@cond@section@pre{7mm}
 \newlength\tt@cond@section@post   \setlength\tt@cond@section@post{3mm}
 \newlength\tt@cond@subsec@pre     \setlength\tt@cond@subsec@pre{6mm}
@@ -249,3 +330,4 @@
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 \renewcommand{\arraystretch}{1.2}
 
+\makeatother

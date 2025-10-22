@@ -1,11 +1,12 @@
 \documentclass{article}
 % Symlink tandemtext.sty into this directory for local dev:
 %   ln -s ../tandemtext.sty examples/tandemtext.sty
-\usepackage[english,spanish]{tandemtext}
+\usepackage[british,spanish,compactlayout]{tandemtext}
 
 \title{tandemtext playground}
 \author{Development sandbox}
 \date{\today}
+
 
 \begin{document}
 \maketitle
@@ -52,5 +53,34 @@ Condensed variants reduce vertical whitespace before and after headings.%
 }{%
 Las variantes condensadas reducen el espacio vertical antes y después de los encabezados.%
 }
+
+\BilingualSection{Dates}{Fechas}
+
+\BilingualParagraph{%
+Dates are handled by the \texttt{datetime2} package. All features of \texttt{datetime2} are available; see the package documentation for styles, localisation, and custom formatting.%
+}{%
+Las fechas se gestionan con el paquete \texttt{datetime2}. Todas las funciones de \texttt{datetime2} están disponibles; consulte la documentación del paquete para estilos, localización y formatos personalizados.%
+}
+
+\BilingualParagraph{%
+Quick use: ISO-style dates are fully supported and can be displayed by calling the command\\
+\texttt{\textbackslash DTMdate\{YYYY-MM-DD\}};\\
+this function automatically converts an ISO-formatted date into the appropriate local form. For example,\\
+\texttt{\textbackslash DTMdate\{2025-07-10\}}\\
+will display the date according to the currently active language settings.%
+}{%
+Uso rápido: las fechas ISO también son compatibles y pueden mostrarse fácilmente mediante la llamada a la orden\\
+\texttt{\textbackslash DTMdate\{YYYY-MM-DD\}};\\
+esta función convierte automáticamente una fecha en formato ISO a la forma local correspondiente. Por ejemplo,\\
+\texttt{\textbackslash DTMdate\{2025-07-10\}}\\
+mostrará la fecha según las convenciones del idioma activo.%
+}
+
+\BilingualParagraph{%
+Examples: Today is \today. ISO input: \texttt{\textbackslash DTMdate\{2025-07-10\}} → \DTMdate{2025-07-10}. Components: \texttt{\textbackslash DTMdisplaydate\{2025\}\{07\}\{10\}\{-1\}} → \DTMdisplaydate{2025}{07}{10}{-1}.%
+}{%
+Ejemplos: Hoy es \today. Entrada ISO: \texttt{\textbackslash DTMdate\{2025-07-10\}} → \DTMdate{2025-07-10}. Por componentes: \texttt{\textbackslash DTMdisplaydate\{2025\}\{07\}\{10\}\{-1\}} → \DTMdisplaydate{2025}{07}{10}{-1}.%
+}
+
 
 \end{document}
